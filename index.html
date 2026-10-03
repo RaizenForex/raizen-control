@@ -1,4 +1,4 @@
-```html
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -6,156 +6,297 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>RAIZEN CONTROL</title>
 <style>
-* {box-sizing:border-box}
-body {
-  margin:0; font-family:Arial,sans-serif;
-  background:#0b0e11; color:#f4f4f4;
-}
-header {
-  padding:20px; border-bottom:1px solid #292929;
-  display:flex; justify-content:space-between;
-  align-items:center;
-}
-.logo {color:#e9bd59;font-size:21px;font-weight:bold}
-.status {color:#e9bd59;font-size:12px}
-main {max-width:950px;margin:auto;padding:22px}
-h2 {font-size:19px;margin:10px 0 18px}
-.grid {
-  display:grid;grid-template-columns:repeat(2,1fr);
-  gap:14px;
-}
-.card {
-  background:#15191e;border:1px solid #2a2e32;
-  border-radius:13px;padding:18px;
-}
-.small {color:#929ba5;font-size:13px}
-.value {font-size:25px;font-weight:bold;margin-top:10px}
-.gold {color:#e9bd59}
-.green {color:#45d49a}
-.controls {margin-top:22px}
-label {display:block;color:#aab0b6;font-size:13px;margin:14px 0 7px}
-input {
-  width:100%;padding:13px;background:#0d1116;
-  color:white;border:1px solid #343a40;
-  border-radius:8px;font-size:15px;
-}
-button {
-  padding:13px;border:0;border-radius:8px;
-  font-weight:bold;cursor:pointer;
-}
-.buttons {display:flex;gap:10px;margin-top:16px}
-.buttons button {flex:1}
-.on {background:#1d7652;color:white}
-.off {background:#343a40;color:white}
-.save {
-  width:100%;background:#e9bd59;color:#17130b;
-  margin-top:18px;
-}
-.note {font-size:12px;color:#929ba5;line-height:1.6;margin-top:20px}
-footer {text-align:center;color:#777;padding:24px;font-size:12px}
-@media(min-width:650px) {
-  .grid {grid-template-columns:repeat(4,1fr)}
-  .settings {display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#0b0e11;color:#f4f4f4}
+header{padding:20px;border-bottom:1px solid #292929;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.logo{color:#e9bd59;font-size:21px;font-weight:bold}
+.status{color:#e9bd59;font-size:12px}
+main{max-width:950px;margin:auto;padding:22px}
+h2{font-size:19px;margin:10px 0 18px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.card{background:#15191e;border:1px solid #2a2e32;border-radius:13px;padding:18px}
+.small{color:#929ba5;font-size:13px}
+.value{font-size:25px;font-weight:bold;margin-top:10px;overflow-wrap:anywhere}
+.gold{color:#e9bd59}.green{color:#45d49a}.red{color:#ff7373}
+.controls{margin-top:22px}
+label{display:block;color:#aab0b6;font-size:13px;margin:14px 0 7px}
+input{width:100%;padding:13px;background:#0d1116;color:white;border:1px solid #343a40;border-radius:8px;font-size:15px}
+button{padding:13px;border:0;border-radius:8px;font-weight:bold;cursor:pointer}
+button:disabled{opacity:.5;cursor:wait}
+.buttons{display:flex;gap:10px;margin-top:16px}
+.buttons button{flex:1}
+.on{background:#1d7652;color:white}.off{background:#343a40;color:white}
+.save{width:100%;background:#e9bd59;color:#17130b;margin-top:18px}
+.connect{background:#343a40;color:white;margin-top:10px;width:100%}
+.note{font-size:12px;color:#929ba5;line-height:1.6;margin-top:20px;overflow-wrap:anywhere}
+.settings{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+.auth{margin:18px 0}
+footer{text-align:center;color:#777;padding:24px;font-size:12px}
+@media(max-width:520px){
+ header{padding:16px;align-items:flex-start;flex-direction:column}
+ main{padding:16px}
+ .settings{grid-template-columns:1fr}
+ .value{font-size:22px}
 }
 </style>
 </head>
 <body>
 <header>
   <div class="logo">⚡ RAIZEN CONTROL</div>
-  <div class="status">● DASHBOARD DEMO</div>
+  <div class="status" id="connectionStatus">● API BELUM TERHUBUNG</div>
 </header>
 
 <main>
   <h2>Trading Overview</h2>
   <div class="grid">
-    <div class="card">
-      <div class="small">Balance</div>
-      <div class="value" id="balance">$0.00</div>
-    </div>
-    <div class="card">
-      <div class="small">Equity</div>
-      <div class="value" id="equity">$0.00</div>
-    </div>
-    <div class="card">
-      <div class="small">Profit Hari Ini</div>
-      <div class="value green" id="profit">$0.00</div>
-    </div>
-    <div class="card">
-      <div class="small">Target Profit</div>
-      <div class="value gold" id="targetDisplay">$50.00</div>
-    </div>
+    <div class="card"><div class="small">Balance</div><div class="value" id="balance">—</div></div>
+    <div class="card"><div class="small">Equity</div><div class="value" id="equity">—</div></div>
+    <div class="card"><div class="small">Profit Hari Ini</div><div class="value green" id="profit">Belum tersedia</div></div>
+    <div class="card"><div class="small">Target Profit</div><div class="value gold" id="targetDisplay">$50.00</div></div>
+  </div>
+
+  <div class="card auth">
+    <h2>Akses Admin</h2>
+    <label for="adminToken">Token admin Cloudflare</label>
+    <input id="adminToken" type="password" autocomplete="off"
+      placeholder="Tempel token RAIZEN_ADMIN_TOKEN">
+    <button class="connect" id="connectBtn" onclick="connectAPI()">Hubungkan API</button>
+    <div class="note">Token hanya disimpan di memori halaman ini. Jangan gunakan perangkat publik. Putuskan koneksi dan tutup halaman setelah selesai.</div>
   </div>
 
   <div class="card controls">
     <h2>Kontrol EA</h2>
-    <div class="small">Status: <b id="eaStatus" class="gold">OFF (DEMO)</b></div>
+    <div class="small">Perintah terakhir: <b id="eaStatus" class="gold">Belum diketahui</b></div>
+    <div class="small" style="margin-top:8px">Koneksi EA: <b id="eaConnection">Belum diketahui</b></div>
     <div class="buttons">
-      <button class="on" onclick="setEA(true)">EA ON</button>
-      <button class="off" onclick="setEA(false)">EA OFF</button>
+      <button class="on" id="onBtn" onclick="setEA(true)" disabled>EA ON</button>
+      <button class="off" id="offBtn" onclick="setEA(false)" disabled>EA OFF</button>
     </div>
+
     <div class="settings">
-      <div>
-        <label for="lot">Lot</label>
-        <input id="lot" type="number" min="0.01" step="0.01" value="0.01">
-      </div>
-      <div>
-        <label for="tp">Take Profit (points)</label>
-        <input id="tp" type="number" min="1" value="300">
-      </div>
-      <div>
-        <label for="sl">Stop Loss (points)</label>
-        <input id="sl" type="number" min="1" value="200">
-      </div>
-      <div>
-        <label for="target">Target Profit Harian ($)</label>
-        <input id="target" type="number" min="1" value="50">
-      </div>
+      <div><label for="lot">Lot</label><input id="lot" type="number" min="0.01" max="100" step="0.01" value="0.01"></div>
+      <div><label for="tp">Take Profit (points)</label><input id="tp" type="number" min="0" max="1000000" step="1" value="300"></div>
+      <div><label for="sl">Stop Loss (points)</label><input id="sl" type="number" min="0" max="1000000" step="1" value="200"></div>
+      <div><label for="target">Target Profit Harian ($)</label><input id="target" type="number" min="0" max="100000000" step="0.01" value="50"></div>
     </div>
-    <button class="save" onclick="saveSettings()">SIMPAN PENGATURAN DEMO</button>
-    <div class="note" id="message">
-      Mode pratinjau: perubahan hanya tampil di browser.
-      Belum terhubung ke akun MT5 atau server trading.
-    </div>
+
+    <button class="save" id="saveBtn" onclick="saveSettings()" disabled>SIMPAN PENGATURAN</button>
+    <div class="note" id="message">Hubungkan API untuk membaca status dan mengirim pengaturan.</div>
+    <div class="note" id="lastReport">Laporan EA: belum tersedia.</div>
   </div>
+
   <p class="note">
-    Peringatan: Dashboard ini hanya antarmuka demo.
-    Tombol ON/OFF tidak mengaktifkan atau menonaktifkan EA
-    yang berjalan di MetaTrader 5.
+    Peringatan: perintah yang diterima API belum membuktikan strategi EA telah menerapkannya.
+    Uji di akun demo terlebih dahulu. Tombol OFF tidak otomatis menutup posisi yang sudah terbuka.
   </p>
 </main>
 <footer>RAIZEN CONTROL © 2026</footer>
 
 <script>
-let enabled = false;
+"use strict";
 
-function setEA(value) {
-  enabled = value;
-  document.getElementById("eaStatus").textContent =
-    enabled ? "ON (DEMO SAJA)" : "OFF (DEMO)";
-  document.getElementById("eaStatus").className =
-    enabled ? "green" : "gold";
-  document.getElementById("message").textContent =
-    "Status pratinjau berubah. EA MT5 tidak terpengaruh.";
+const API_BASE = "https://raizen-api.akbc45575857.workers.dev";
+let adminToken = "";
+let currentCommand = null;
+let busy = false;
+
+const $ = id => document.getElementById(id);
+
+function message(text, error = false) {
+  $("message").textContent = text;
+  $("message").className = error ? "note red" : "note";
 }
 
-function saveSettings() {
-  const lot = Number(document.getElementById("lot").value);
-  const tp = Number(document.getElementById("tp").value);
-  const sl = Number(document.getElementById("sl").value);
-  const target = Number(document.getElementById("target").value);
+function money(value) {
+  if (!Number.isFinite(value)) return "—";
+  return "$" + value.toFixed(2);
+}
 
-  if (![lot,tp,sl,target].every(Number.isFinite) ||
-      lot < 0.01 || tp <= 0 || sl <= 0 || target <= 0) {
-    alert("Periksa kembali pengaturan.");
+function setConnected(connected) {
+  $("connectionStatus").textContent = connected
+    ? "● API TERHUBUNG"
+    : "● API TIDAK TERHUBUNG";
+  $("connectionStatus").className = connected ? "green" : "red";
+  ["onBtn", "offBtn", "saveBtn"].forEach(id => {
+    $(id).disabled = !connected || busy;
+  });
+}
+
+function settingsFromForm() {
+  const lot = Number($("lot").value);
+  const tp = Number($("tp").value);
+  const sl = Number($("sl").value);
+  const targetProfit = Number($("target").value);
+
+  if (!Number.isFinite(lot) || lot < 0.01 || lot > 100 ||
+      !Number.isFinite(tp) || !Number.isInteger(tp) || tp < 0 || tp > 1000000 ||
+      !Number.isFinite(sl) || !Number.isInteger(sl) || sl < 0 || sl > 1000000 ||
+      !Number.isFinite(targetProfit) || targetProfit < 0 || targetProfit > 100000000) {
+    throw new Error("Periksa lot, SL, TP, dan target profit.");
+  }
+
+  return { lot, tpPoints: tp, slPoints: sl, targetProfit };
+}
+
+async function api(path, options = {}) {
+  const response = await fetch(API_BASE + path, {
+    ...options,
+    cache: "no-store",
+    headers: {
+      "Authorization": "Bearer " + adminToken,
+      ...(options.body ? { "Content-Type": "application/json" } : {}),
+      ...options.headers
+    }
+  });
+
+  const data = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    if (response.status === 401) {
+      throw new Error("Token admin ditolak. Periksa token dan deploy.");
+    }
+    throw new Error(data.error || "API gagal: HTTP " + response.status);
+  }
+  return data;
+}
+
+async function connectAPI() {
+  const token = $("adminToken").value.trim();
+  if (!token) {
+    message("Masukkan token admin terlebih dahulu.", true);
     return;
   }
 
-  document.getElementById("targetDisplay").textContent =
-    "$" + target.toFixed(2);
-  document.getElementById("message").textContent =
-    "Pengaturan pratinjau diperbarui di halaman ini saja.";
+  adminToken = token;
+  $("connectBtn").disabled = true;
+  try {
+    await refreshState();
+    $("adminToken").value = "";
+    message("API terhubung. Status EA ditampilkan berdasarkan laporan server.");
+  } catch (err) {
+    adminToken = "";
+    setConnected(false);
+    message(err.message, true);
+  } finally {
+    $("connectBtn").disabled = false;
+  }
 }
+
+async function refreshState() {
+  if (!adminToken || busy) return;
+
+  const data = await api("/api/state");
+  currentCommand = data.command || null;
+  const report = data.report || null;
+
+  if (currentCommand) {
+    $("eaStatus").textContent = currentCommand.enabled
+      ? "ON (PERINTAH API)"
+      : "OFF (PERINTAH API)";
+    $("eaStatus").className = currentCommand.enabled ? "green" : "gold";
+
+    if (Number.isFinite(currentCommand.lot)) $("lot").value = currentCommand.lot;
+    if (Number.isFinite(currentCommand.tpPoints)) $("tp").value = currentCommand.tpPoints;
+    if (Number.isFinite(currentCommand.slPoints)) $("sl").value = currentCommand.slPoints;
+    if (Number.isFinite(currentCommand.targetProfit)) {
+      $("target").value = currentCommand.targetProfit;
+      $("targetDisplay").textContent = money(currentCommand.targetProfit);
+    }
+  }
+
+  if (report) {
+    $("balance").textContent = money(report.balance);
+    $("equity").textContent = money(report.equity);
+    $("eaConnection").textContent = report.connected ? "TERHUBUNG" : "TERPUTUS";
+    $("eaConnection").className = report.connected ? "green" : "red";
+    $("lastReport").textContent = "Laporan EA diterima: " +
+      (report.receivedAt || "waktu tidak tersedia");
+  } else {
+    $("balance").textContent = "—";
+    $("equity").textContent = "—";
+    $("eaConnection").textContent = "BELUM ADA LAPORAN";
+    $("lastReport").textContent = "Bridge belum mengirim laporan akun.";
+  }
+
+  // API report currently has no daily profit field.
+  $("profit").textContent = "Belum tersedia";
+  setConnected(true);
+}
+
+async function sendCommand(enabled) {
+  const settings = settingsFromForm();
+  const data = await api("/api/command", {
+    method: "POST",
+    body: JSON.stringify({ ...settings, enabled })
+  });
+
+  currentCommand = data.command;
+  $("eaStatus").textContent = enabled ? "ON (PERINTAH API)" : "OFF (PERINTAH API)";
+  $("eaStatus").className = enabled ? "green" : "gold";
+  message("Perintah " + (enabled ? "ON" : "OFF") +
+    " diterima API. Menunggu konfirmasi dari EA Bridge.");
+  return data;
+}
+
+async function setEA(enabled) {
+  if (!adminToken || busy) return;
+  busy = true;
+  setConnected(true);
+  try {
+    await sendCommand(enabled);
+  } catch (err) {
+    message(err.message, true);
+  } finally {
+    busy = false;
+    setConnected(Boolean(adminToken));
+  }
+}
+
+async function saveSettings() {
+  if (!adminToken || busy) return;
+  busy = true;
+  setConnected(true);
+  try {
+    const enabled = currentCommand ? currentCommand.enabled : false;
+    await sendCommand(enabled);
+    $("targetDisplay").textContent = money(Number($("target").value));
+    message("Pengaturan tersimpan di server. EA harus mendukung pengaturan ini agar diterapkan.");
+  } catch (err) {
+    message(err.message, true);
+  } finally {
+    busy = false;
+    setConnected(Boolean(adminToken));
+  }
+}
+
+function disconnectAPI() {
+  adminToken = "";
+  currentCommand = null;
+  setConnected(false);
+  $("connectionStatus").textContent = "● API BELUM TERHUBUNG";
+  $("eaStatus").textContent = "Belum diketahui";
+  $("eaConnection").textContent = "Belum diketahui";
+  $("balance").textContent = "—";
+  $("equity").textContent = "—";
+  $("profit").textContent = "Belum tersedia";
+  $("lastReport").textContent = "Laporan EA: belum tersedia.";
+  message("Koneksi API diputus.");
+}
+
+setConnected(false);
+window.addEventListener("pagehide", () => { adminToken = ""; });
+
+// Refresh state while the dashboard remains connected.
+setInterval(async () => {
+  if (!adminToken || busy) return;
+  try {
+    await refreshState();
+  } catch (err) {
+    setConnected(false);
+    message(err.message, true);
+  }
+}, 10000);
 </script>
 </body>
 </html>
-```
+
