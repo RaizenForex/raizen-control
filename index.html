@@ -1,0 +1,161 @@
+```html
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RAIZEN CONTROL</title>
+<style>
+* {box-sizing:border-box}
+body {
+  margin:0; font-family:Arial,sans-serif;
+  background:#0b0e11; color:#f4f4f4;
+}
+header {
+  padding:20px; border-bottom:1px solid #292929;
+  display:flex; justify-content:space-between;
+  align-items:center;
+}
+.logo {color:#e9bd59;font-size:21px;font-weight:bold}
+.status {color:#e9bd59;font-size:12px}
+main {max-width:950px;margin:auto;padding:22px}
+h2 {font-size:19px;margin:10px 0 18px}
+.grid {
+  display:grid;grid-template-columns:repeat(2,1fr);
+  gap:14px;
+}
+.card {
+  background:#15191e;border:1px solid #2a2e32;
+  border-radius:13px;padding:18px;
+}
+.small {color:#929ba5;font-size:13px}
+.value {font-size:25px;font-weight:bold;margin-top:10px}
+.gold {color:#e9bd59}
+.green {color:#45d49a}
+.controls {margin-top:22px}
+label {display:block;color:#aab0b6;font-size:13px;margin:14px 0 7px}
+input {
+  width:100%;padding:13px;background:#0d1116;
+  color:white;border:1px solid #343a40;
+  border-radius:8px;font-size:15px;
+}
+button {
+  padding:13px;border:0;border-radius:8px;
+  font-weight:bold;cursor:pointer;
+}
+.buttons {display:flex;gap:10px;margin-top:16px}
+.buttons button {flex:1}
+.on {background:#1d7652;color:white}
+.off {background:#343a40;color:white}
+.save {
+  width:100%;background:#e9bd59;color:#17130b;
+  margin-top:18px;
+}
+.note {font-size:12px;color:#929ba5;line-height:1.6;margin-top:20px}
+footer {text-align:center;color:#777;padding:24px;font-size:12px}
+@media(min-width:650px) {
+  .grid {grid-template-columns:repeat(4,1fr)}
+  .settings {display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">⚡ RAIZEN CONTROL</div>
+  <div class="status">● DASHBOARD DEMO</div>
+</header>
+
+<main>
+  <h2>Trading Overview</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="small">Balance</div>
+      <div class="value" id="balance">$0.00</div>
+    </div>
+    <div class="card">
+      <div class="small">Equity</div>
+      <div class="value" id="equity">$0.00</div>
+    </div>
+    <div class="card">
+      <div class="small">Profit Hari Ini</div>
+      <div class="value green" id="profit">$0.00</div>
+    </div>
+    <div class="card">
+      <div class="small">Target Profit</div>
+      <div class="value gold" id="targetDisplay">$50.00</div>
+    </div>
+  </div>
+
+  <div class="card controls">
+    <h2>Kontrol EA</h2>
+    <div class="small">Status: <b id="eaStatus" class="gold">OFF (DEMO)</b></div>
+    <div class="buttons">
+      <button class="on" onclick="setEA(true)">EA ON</button>
+      <button class="off" onclick="setEA(false)">EA OFF</button>
+    </div>
+    <div class="settings">
+      <div>
+        <label for="lot">Lot</label>
+        <input id="lot" type="number" min="0.01" step="0.01" value="0.01">
+      </div>
+      <div>
+        <label for="tp">Take Profit (points)</label>
+        <input id="tp" type="number" min="1" value="300">
+      </div>
+      <div>
+        <label for="sl">Stop Loss (points)</label>
+        <input id="sl" type="number" min="1" value="200">
+      </div>
+      <div>
+        <label for="target">Target Profit Harian ($)</label>
+        <input id="target" type="number" min="1" value="50">
+      </div>
+    </div>
+    <button class="save" onclick="saveSettings()">SIMPAN PENGATURAN DEMO</button>
+    <div class="note" id="message">
+      Mode pratinjau: perubahan hanya tampil di browser.
+      Belum terhubung ke akun MT5 atau server trading.
+    </div>
+  </div>
+  <p class="note">
+    Peringatan: Dashboard ini hanya antarmuka demo.
+    Tombol ON/OFF tidak mengaktifkan atau menonaktifkan EA
+    yang berjalan di MetaTrader 5.
+  </p>
+</main>
+<footer>RAIZEN CONTROL © 2026</footer>
+
+<script>
+let enabled = false;
+
+function setEA(value) {
+  enabled = value;
+  document.getElementById("eaStatus").textContent =
+    enabled ? "ON (DEMO SAJA)" : "OFF (DEMO)";
+  document.getElementById("eaStatus").className =
+    enabled ? "green" : "gold";
+  document.getElementById("message").textContent =
+    "Status pratinjau berubah. EA MT5 tidak terpengaruh.";
+}
+
+function saveSettings() {
+  const lot = Number(document.getElementById("lot").value);
+  const tp = Number(document.getElementById("tp").value);
+  const sl = Number(document.getElementById("sl").value);
+  const target = Number(document.getElementById("target").value);
+
+  if (![lot,tp,sl,target].every(Number.isFinite) ||
+      lot < 0.01 || tp <= 0 || sl <= 0 || target <= 0) {
+    alert("Periksa kembali pengaturan.");
+    return;
+  }
+
+  document.getElementById("targetDisplay").textContent =
+    "$" + target.toFixed(2);
+  document.getElementById("message").textContent =
+    "Pengaturan pratinjau diperbarui di halaman ini saja.";
+}
+</script>
+</body>
+</html>
+```
